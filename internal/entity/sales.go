@@ -12,6 +12,15 @@ type Sales struct {
 	UpdatedAt       *time.Time `gorm:"updated_at"`
 }
 
+type DownlaodSalesData struct {
+	Name                  string `gorm:"column:name"`
+	DaysTotal             int64  `gorm:"column:days_total"`
+	TransactionTotal      int64  `gorm:"column:transaction_total"`
+	GoodsTransactionTotal int64  `gorm:"column:goods_transaction_total"`
+	NominalTotal          int64  `gorm:"column:nominal_total"`
+	GoodsNominalTotal     int64  `gorm:"column:goods_nominal_total"`
+}
+
 func (Sales) TableName() string {
 	return "sales"
 }

@@ -39,6 +39,7 @@ func TokenValid(key string, c *gin.Context) error {
 	if ok && result.Valid {
 		c.Set("id", claims["id"])
 		c.Set("email", claims["email"])
+		c.Set("name", claims["name"])
 	}
 
 	result.Claims.Valid()

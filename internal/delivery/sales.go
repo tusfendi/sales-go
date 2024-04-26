@@ -2,6 +2,7 @@ package delivery
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/tusfendi/sales-go/internal/constants"
@@ -33,7 +34,7 @@ func (u *SalesDelivery) CreateSales(c *gin.Context) {
 		return
 	}
 
-	params.UserID = c.GetInt64("id")
+	params.UserID = int64(c.MustGet("id").(float64))
 	params.Email = c.GetString("email")
 	if httpCode, err := u.salesUsecase.CreateSales(params); err != nil {
 		c.JSON(httpCode, gin.H{"response": constants.Failed, "error": err.Error()})
@@ -44,17 +45,12 @@ func (u *SalesDelivery) CreateSales(c *gin.Context) {
 }
 
 func (u *SalesDelivery) DownloadSales(c *gin.Context) {
-	var params presenter.SalesRequest
-	err := c.ShouldBindJSON(&params)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"response": constants.Failed, "error": constants.ErrData})
-		return
-	}
-
-	// if httpCode, err := u.userUsecase.CreateUser(params); err != nil {
-	// 	c.JSON(httpCode, gin.H{"response": constants.Failed, "error": err.Error()})
-	// 	return
-	// }
-
-	c.JSON(http.StatusCreated, gin.H{"response": constants.Success})
+	var params presenter.DownloadSalesRequest
+	today := time.Now().Format(constants.FormatDate)
+	params.UserID = int64(c.MustGet("id").(float64))
+	params.Email = c.GetString("email")
+	params.Name = c.GetString("name")
+	params.StartDate = c.DefaultQuery("start_date", today)
+	params.EndDate = c.DefaultQuery("end_date", today)
+	u.salesUsecase.DownloadSales(c, params)
 }

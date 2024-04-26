@@ -107,6 +107,7 @@ func (u *userCtx) generateToken(params entity.User) (string, error) {
 
 	claims := &presenter.SSJWTClaim{
 		Email: params.Email,
+		Name:  params.Name,
 		ID:    params.ID,
 		StandardClaims: &jwt.StandardClaims{
 			Id:        fmt.Sprintf("%d", params.ID),
