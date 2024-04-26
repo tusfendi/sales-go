@@ -9,6 +9,10 @@ import (
 type Config struct {
 	AppEnv  string
 	ApiPort int
+
+	ExpiredToken int
+	SecretKey    string
+
 	MysqlOption
 }
 
@@ -27,7 +31,7 @@ type MysqlOption struct {
 // NewConfig initialize new config
 func NewConfig() *Config {
 	var cfg Config
-	cfg.setPort().setEnvironment().setMySql()
+	cfg.setPort().setEnvironment().setMySql().setSecretKey().setExpiredToken()
 
 	return &cfg
 }
@@ -36,6 +40,18 @@ func (c *Config) setPort() *Config {
 	v := os.Getenv("API_PORT")
 	c.ApiPort, _ = strconv.Atoi(v)
 
+	return c
+}
+
+func (c *Config) setExpiredToken() *Config {
+	v := os.Getenv("EXPIRED_TOKEN")
+	c.ExpiredToken, _ = strconv.Atoi(v)
+
+	return c
+}
+
+func (c *Config) setSecretKey() *Config {
+	c.SecretKey = os.Getenv("SECRET_KEY")
 	return c
 }
 
