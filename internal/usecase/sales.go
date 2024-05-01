@@ -136,10 +136,6 @@ func (u *salesCtx) DownloadSales(c *gin.Context, params presenter.DownloadSalesR
 		return
 	}
 
-	if err := f.SaveAs(fileName); err != nil {
-		fmt.Println(err)
-	}
-
 	var b bytes.Buffer
 	if err := f.Write(&b); err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
